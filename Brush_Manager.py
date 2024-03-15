@@ -1818,6 +1818,19 @@ class WM_OT_Clear_Favorites(Operator):
         clear_favorites_list()
         return {'FINISHED'}
 
+class WM_OT_Clear_All_Brush_Without_Favorites(Operator):
+    bl_label = 'Clear All Brush Without Favorites'
+    bl_idname = 'bm.clear_all_brush_without_favorites'
+    bl_description = "Remove all Brushes without favorites list"
+
+    def execute(self, context):
+        fav_brushes = get_favorite_brushes()
+        for brush in bpy.data.brushes:
+            if brush.name not in fav_brushes:
+                bpy.data.brushes.remove(brush)
+
+        return {'FINISHED'}
+
 
 class WM_OT_Delete_Zero_User_Brushes(Operator):
     bl_label = 'Delete All Zero User Brushes'
@@ -2366,6 +2379,7 @@ class WM_MT_BrushManager_Ops(Menu):
                 layout.operator("bm.edit_favorites_list_popup", icon='LONGDISPLAY')
             layout.operator("bm.remove_active_brush_favorite", icon='REMOVE')
         layout.operator("bm.clear_favorites", icon='X')
+        layout.operator("bm.clear_all_brush_without_favorites", icon='X')
 
 
 def delete_fav_brush_list_update(self, context):
@@ -4535,6 +4549,7 @@ classes = (
     WM_OT_Remove_Active_Favorite,
     WM_OT_Remove_Active_Popup_Favorite,
     WM_OT_Clear_Favorites,
+    WM_OT_Clear_All_Brush_Without_Favorites,
     WM_OT_Delete_Zero_User_Brushes,
     WM_OT_Delete_Active_Brush_Data,
     WM_OT_Refresh_Category_List,
